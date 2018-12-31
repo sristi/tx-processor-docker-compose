@@ -1,0 +1,20 @@
+version: '2'
+services:
+  tx-processor-service:
+    container_name: springbootrestcontainer
+#    build: ./tx-processor-docker
+    image: sureshpunmagar/transaction-processor-service
+    ports:
+      - 8080:8080
+  alpine-client:
+    container_name: alipne_rest_client
+#    build: ./alpine
+    image: sureshpunmagar/my-alpine
+    volumes:
+      - ./scripts:/scripts/
+      - ./test_data:/test_data/
+    links:
+      - tx-processor-service
+    depends_on:
+      - tx-processor-service
+    command: ./scripts/run_spring_boot_rest_service_integration_test.sh
